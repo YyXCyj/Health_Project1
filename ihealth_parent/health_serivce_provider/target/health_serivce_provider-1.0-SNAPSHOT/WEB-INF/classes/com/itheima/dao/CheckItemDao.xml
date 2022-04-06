@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--namespace的值是dao接口的位置-->
+<!--    新增-->
+<!--    id必须和声明的方法名字一致-->
+<!--    parametype必须和pojo定义的类的位置一致-->
+<mapper namespace="com.itheima.dao.CheckItemDao">
+        <insert id="add" parameterType="com.itheima.pojo.CheckItem">
+            insert into t_checkitem(code,name,sex,age,price,type,remark,attention)
+                          values
+            (#{code},#{name},#{sex},#{age},#{price},#{type},#{remark},#{attention})
+        </insert>
+
+    <select id="selectByCondition" parameterType="String" resultType="com.itheima.pojo.CheckItem">
+        select * from t_checkitem
+        <if test="value != null and value.length>0">
+            where code=#{value } or name =#{value}
+        </if>
+    </select>
+
+    <select id="findCountByCheckItemId" parameterType="int" resultType="long">
+        select count(*) from t_checkgroup_checkitem where checkitem_id=#{id}
+    </select>
+
+
+
+
+    <delete id="deleteById" parameterType="int">
+        delete  from t_checkitem where id=#{id}
+    </delete>
+
+    <update id="edit" parameterType="com.itheima.pojo.CheckItem">
+        update  t_checkitem
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="attention != null">
+                attention = #{attention},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findById" parameterType="int" resultType="com.itheima.pojo.CheckItem">
+        select * from t_checkitem where id=#{id}
+    </select>
+
+
+    <select id="findAll" resultType="com.itheima.pojo.CheckItem">
+        select * from t_checkitem
+    </select>
+
+    <select id="findCheckItemById" parameterType="int" resultType="com.itheima.pojo.CheckItem">
+  select * from t_checkitem
+    where id
+  	in (select checkitem_id from t_checkgroup_checkitem where checkgroup_id=#{id})
+</select>
+
+
+</mapper>
+

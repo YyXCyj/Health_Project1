@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title><!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+            Header
+        </el-header>
+        <el-container>
+            <el-aside width="200px">Aside</el-aside>
+            <el-container>
+                <el-main>Main</el-main>
+                <el-footer>Footer</el-footer>
+            </el-container>
+        </el-container>
+    </el-container>
+</div>
+<style>
+    .el-header, .el-footer {
+        background-color: #B3C0D1;
+        color: rgba(51, 51, 51, 0.8);
+        text-align: left;
+        line-height: 60px;
+    }
+
+    .el-aside {
+        background-color: #D3DCE6;
+        color: #b81313;
+        text-align: center;
+        line-height: 200px;
+    }
+
+    .el-main {
+        background-color: #e9eef3;
+        color: #9a2222;
+        text-align: center;
+        line-height: 590px;
+    }
+</style>
+
+<script>
+    new Vue({
+        el:'#app'
+    });
+</script>
+</body>
+</html>

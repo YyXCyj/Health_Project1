@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.itheima.dao.CheckGroupDao">
+    <resultMap type="com.itheima.pojo.CheckGroup" id="baseResultMap">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="helpCode" property="helpCode"/>
+        <result column="sex" property="sex"/>
+        <result column="remark" property="remark"/>
+        <result column="attention" property="attention"/>
+    </resultMap>
+    <resultMap type="com.itheima.pojo.CheckGroup"
+               id="findByIdResultMap"
+               extends="baseResultMap">
+        <collection property="checkItems"
+                    javaType="ArrayList"
+                    ofType="com.itheima.pojo.CheckItem"
+                    column="id"
+                    select="com.itheima.dao.CheckItemDao.findCheckItemById">
+        </collection>
+    </resultMap>
+
+    <insert id="add" parameterType="com.itheima.pojo.CheckGroup">
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+    select LAST_INSERT_ID()
+</selectKey>
+        insert into t_checkgroup(code,name,helpCode,sex,remark,attention)
+                          values
+            (#{code},#{name},#{helpCode},#{sex},#{remark},#{attention})
+    </insert>
+
+    <insert id="setCheckAndCheck" parameterType="map">
+
+        insert into t_checkgroup_checkitem(checkgroup_id,checkitem_id)
+        values
+        (#{checkGroupId},#{checkitemIds})
+    </insert>
+
+    <select id="findByCondition" parameterType="String" resultType="com.itheima.pojo.CheckGroup">
+        select * from t_checkgroup
+        <if test="value != null and value.length>0">
+            where code=#{value } or name =#{value} or helpCode=#{value}
+        </if>
+    </select>
+
+    <select id="findById" parameterType="int" resultType="com.itheima.pojo.CheckGroup">
+        select * from t_checkgroup where id=#{id}
+    </select>
+
+<!--    <select id="findCheckItemIdsByCheckGroupId" parameterType="int " resultType="int">-->
+<!--        select checkitem_id from t_checkgroup_checkitem where checkgroup_id=#{id}-->
+<!--    </select>-->
+    <select id="findCheckItemIdsByCheckGroupId" parameterType="int" resultType="int">
+  select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{id}
+</select>
+
+    <update id="edit" parameterType="com.itheima.pojo.CheckGroup">
+        update t_checkgroup
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="helpCode != null">
+                helpCode = #{helpCode},
+            </if>
+            <if test="attention != null">
+                attention = #{attention},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAssocication" parameterType="int">
+        delete from t_checkgroup_checkitem where checkgroup_id = #{checkGroupId}
+    </delete>
+
+
+    <select id="findAll" resultType="com.itheima.pojo.CheckGroup">
+  select * from t_checkgroup
+</select>
+
+<!--    <select id="findCheckGroupById" resultType="findByIdResultMap">-->
+<!--select * from t_checkgroup-->
+<!--    where id-->
+<!--  	in (select checkgroup_id from t_setmeal_checkgroup where setmeal_id=#{id})-->
+<!--    </select>-->
+
+
+    <select id="findCheckGroupById" parameterType="int" resultMap="findByIdResultMap">
+  select * from t_checkgroup
+    where id
+  	in (select checkgroup_id from t_setmeal_checkgroup where setmeal_id=#{setmeal_id})
+</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
